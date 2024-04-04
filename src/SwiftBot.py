@@ -42,7 +42,10 @@ class SwiftBotClient(discord.Client):
                 await message.reply(f"couldn't send file")
                 print(Fore.RED + f"Failed. Forbidden.\n" + Style.RESET_ALL)
                 return
-            
+            except discord.errors.HTTPException:
+                await message.reply(f"your file needs to be less than 25 megabytes", mention_author=False)
+                print(Fore.RED + f"Failed. File too large.\n" + Style.RESET_ALL)
+                return
             print(Fore.GREEN + "Succeeded.\n" + Style.RESET_ALL)
             return
         
