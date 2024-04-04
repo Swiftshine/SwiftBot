@@ -49,4 +49,5 @@ class SwiftBotClient(discord.Client):
 
         if message.content == ";github;":
             await message.reply("https://github.com/Swiftshine/SwiftBot", mention_author = False)
+            print("User " + Fore.CYAN + f"{message.author}" + Style.RESET_ALL + " used the " + Fore.GREEN + "github" + Style.RESET_ALL + " command")
             return
