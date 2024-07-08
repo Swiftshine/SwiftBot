@@ -61,5 +61,5 @@ class SwiftBotClient(discord.Client):
             return
 
         if command == "source-code":
-            await message.reply("https://github.com/Swiftshine/SwiftBot", mention_author = do_ping)
+            await message.reply("<https://github.com/Swiftshine/SwiftBot>", mention_author = do_ping)
             return
