@@ -1,7 +1,7 @@
 # SwiftBot
 
 ## Requirements
-* Python 3
+* Python 3.8+
 * Your own Discord developer application (and token)
 * `discord.py`
 * `colorama`
@@ -21,10 +21,10 @@ To run the bot, run `start.py`.
 
 ## Commands
 
-Commands are encased in semicolons. For example:
+Commands are prefixed with a lowercase (reply, no ping) or uppercase (reply, with ping) letter 's'.
 
 ```
-;ping;
+-s ping
 ```
 
 Here is a full table of commands:

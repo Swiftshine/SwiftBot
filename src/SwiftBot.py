@@ -12,45 +12,54 @@ class SwiftBotClient(discord.Client):
 
         print(Fore.GREEN + f"ON_READY: {self.user} is online.\n" + Style.RESET_ALL)
     
+
     async def on_message(self, message: discord.Message):
         if message.author == self.user: return
 
-        if message.content == ";ping;":
-            await message.reply("pong!", mention_author = False)
-            print(f"User " + Fore.CYAN + f"{message.author}" + Style.RESET_ALL + " used the " + Fore.GREEN + "ping" + Style.RESET_ALL + " command\n")
+        command: str = message.content
+
+        if (not message.content.startswith("-s ")) and (not message.content.startswith("-S ")): return 
+
+        do_ping: bool = False
+        if command.startswith("-S "): do_ping = True
+
+
+        command = command.replace("-s ", "").replace("-S ", "")
+
+
+        if "ping" == command:
+            await message.reply("pong!", mention_author = do_ping)
+            print(f"User " + Fore.CYAN + f"{message.author}" + Style.RESET_ALL + " used the " + Fore.GREEN + "ping" + Style.RESET_ALL + " command", end = "\n\n")
             return
         
-        if message.content.startswith(";get-file;"):
-            if message.content == ";get-file;" or message.content == ";get-file; ":
-                await message.reply("you need to specify a file", mention_author = False)
+        if command.startswith("get-file"):
+            # check if syntax is valid
+            if "get-file" == command:
+                await message.reply("please specify a file", mention_author = do_ping)
                 return
-
-            index = message.content.find(" ")
-            filename = message.content[index + 1:]
+            
+            index = command.find(" ")
+            filename = command[index + 1 : ]
             filename.strip("..")
-            print(f"User " + Fore.CYAN + f"{message.author}" + Style.RESET_ALL + " used the " + Fore.GREEN + "get-file" + Style.RESET_ALL + " command for file " + Fore.GREEN + f"{filename}" + Style.RESET_ALL)
-
+            print(f"User " + Fore.CYAN + f"{message.author}" + Style.RESET_ALL + " used the " + Fore.GREEN + "get-file" + Style.RESET_ALL + " command for file " + Fore.GREEN + f"{filename}" + Style.RESET_ALL, end = "\n\t")
 
             if not os.path.exists("files/" + filename):
-                await message.reply(f"the file {filename} doesn't exist", mention_author = False)
-                print(Fore.RED + f"Failed. File {filename} does not exist.\n" + Style.RESET_ALL)
+                await message.reply(f"the filename **{filename}** doesn't exist", mention_author = do_ping)
+                print(Fore.RED + f"Failed. File {filename} does not exist." + Style.RESET_ALL)
                 return
-
+            
             try:
-                await message.reply(file=discord.File("files/" + filename), mention_author = False)
+                await message.reply(file = discord.File("files/" + filename), mention_author = do_ping)
             except discord.errors.Forbidden:
-                await message.reply(f"couldn't send file")
-                print(Fore.RED + f"Failed. Forbidden.\n" + Style.RESET_ALL)
+                print(Fore.RED + "Failed. Forbidden." + Style.RESET_ALL)
+                await message.reply("Failed. Forbidden.", mention_author = do_ping)
                 return
             except discord.errors.HTTPException:
-                await message.reply(f"your file needs to be less than 25 megabytes", mention_author=False)
-                print(Fore.RED + f"Failed. File too large.\n" + Style.RESET_ALL)
+                print(Fore.RED + f"Failed. File too large." + Style.RESET_ALL)
+                await message.reply("Failed. File needs to be less than 25 megabytes.", mention_author = do_ping)
                 return
-            print(Fore.GREEN + "Succeeded.\n" + Style.RESET_ALL)
             return
-        
 
-        if message.content == ";github;":
-            await message.reply("https://github.com/Swiftshine/SwiftBot", mention_author = False)
-            print("User " + Fore.CYAN + f"{message.author}" + Style.RESET_ALL + " used the " + Fore.GREEN + "github" + Style.RESET_ALL + " command")
+        if command == "source-code":
+            await message.reply("https://github.com/Swiftshine/SwiftBot", mention_author = do_ping)
             return
