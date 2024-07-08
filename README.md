@@ -33,4 +33,4 @@ Here is a full table of commands:
 |---|---|---|
 | ping    | If the bot is up, it replies with "pong!" | - |
 | get-file | The bot will send the file specified. | -get-file sample.txt |
-| github | Links this page. | -|
+| source-code | Links this page. | -|
